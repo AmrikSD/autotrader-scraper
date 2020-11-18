@@ -8,19 +8,27 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver; 
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+
 
 /**
  * Unit test for just selenium.
- * 
+ *
  */
 public class SeleniumTest {
-  private static FirefoxDriver driver;
+
   private WebElement element;
+  private WebDrver driver;
 
   @BeforeClass
 	public static void openBrowser(){
-    driver = new FirefoxDriver();
+    WebDriverManager.firefoxdriver().setup();
+    FirefoxOptions options = new FirefoxOptions();
+    options.addArguments("--no-sandbox");
+    options.addArguments("--disable-dev-shm-usage");
+    options.addArguments("--headless");
+    driver = new FirefoxDriver(options);
     driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 	}
 
@@ -38,4 +46,3 @@ public class SeleniumTest {
   }
 
 }
-
