@@ -7,6 +7,8 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
+import io.github.bonigarcia.wdm.WebDriverManager;
+
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
@@ -17,6 +19,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
  *
  */
 public class SeleniumTest {
+
 
   private WebElement element;
   private FirefoxDriver driver;
