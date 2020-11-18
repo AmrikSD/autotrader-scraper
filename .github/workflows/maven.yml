@@ -23,6 +23,6 @@ jobs:
     - name: make shell script executable
       run: chmod +x ./scripts/InstallChrome.sh
     - name: Install chrome with the script
-      run: ./scripts/Installchrome.sh
+      run: ./scripts/InstallChrome.sh
     - name: Build with Maven
       run: mvn -B package --file pom.xml
