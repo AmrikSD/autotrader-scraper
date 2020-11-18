@@ -3,6 +3,7 @@ package de.amrik.autoscraper;
 import java.util.concurrent.TimeUnit;
 
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
@@ -39,11 +40,19 @@ public class SeleniumTest {
       }
 
       @Test
-      public void userLogin(){
+      public void getGoogle(){
        System.out.println("Starting test " + new Object(){}.getClass().getEnclosingMethod().getName());
-       driver.get("http://192.168.0.15");
-       element = driver.findElement(new By.ByXPath("/html/body/div/header/nav/a"));
-       assertEquals("OldMan Bot" , element.getText());
+       
+       driver.get("https://www.google.com");
+       WebElement searchTxt = driver.findElement(By.name("q"));
+       WebElement submitBtn = driver.findElement(By.name("btnK"));
+
+       searchTxt.sendKeys("test");
+       submitBtn.click();
+
+       System.out.println("Current URL is: " + driver.getCurrentUrl());
+       Assert.assertTrue(driver.getTitle().contains("test"));
+       System.out.println("Current Title is: " + driver.getTitle());
       }
 
       @AfterClass
