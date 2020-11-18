@@ -34,11 +34,10 @@
 
     <!-- https://mvnrepository.com/artifact/io.github.bonigarcia/webdrivermanager -->
     <dependency>
-        <groupId>io.github.bonigarcia</groupId>
-        <artifactId>webdrivermanager</artifactId>
-        <version>4.2.2</version>
+    <groupId>io.github.bonigarcia</groupId>
+    <artifactId>webdrivermanager</artifactId>
+    <version>4.1.0</version>
     </dependency>
-  </dependencies>
 
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
