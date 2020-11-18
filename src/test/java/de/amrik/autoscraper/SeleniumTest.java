@@ -21,10 +21,11 @@ import org.openqa.selenium.chrome.ChromeOptions;
  */
 public class SeleniumTest {
 
-      private WebDriver driver;
-
+      private static WebDriver driver;
+      private WebElement element;
+      
       @BeforeClass
-      public void setUp()
+      public static void setUp()
       {
           WebDriverManager.chromedriver().setup();
           ChromeOptions options = new ChromeOptions();
@@ -38,19 +39,15 @@ public class SeleniumTest {
       }
 
       @Test
-      public void userLogin()
-      {
-          WebElement searchTxt = driver.findElement(By.name("q"));
-          searchTxt.sendKeys("automation");
-          WebElement submitBtn = driver.findElement(By.name("btnK"));
-          submitBtn.click();
-          System.out.println("Current URL is:" + driver.getCurrentUrl());
-          Assert.assertTrue(driver.getTitle().contains("automation - Google Search"));
-          System.out.println("Current Title is:" + driver.getTitle());
+      public void userLogin(){
+       System.out.println("Starting test " + new Object(){}.getClass().getEnclosingMethod().getName());
+       driver.get("http://192.168.0.15");
+       element = driver.findElement(new By.ByXPath("/html/body/div/header/nav/a"));
+       assertEquals("OldMan Bot" , element.getText());
       }
 
       @AfterClass
-      public void tearDown(){
+      public static void tearDown(){
           if (driver != null) {
               driver.quit();
           }
