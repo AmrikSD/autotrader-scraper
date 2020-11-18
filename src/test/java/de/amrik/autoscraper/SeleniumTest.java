@@ -8,9 +8,9 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.WebDrver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-
+import org.openqa.selenium.firefox.FirefoxDriver;
 
 /**
  * Unit test for just selenium.
@@ -19,7 +19,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 public class SeleniumTest {
 
   private WebElement element;
-  private WebDrver driver;
+  private FirefoxDriver driver;
 
   @BeforeClass
 	public static void openBrowser(){
