@@ -1,8 +1,10 @@
 package de.amrik.autoscraper;
 
+import java.util.ArrayList;
+
 import de.amrik.autoscraper.AutoData;
 import de.amrik.autoscraper.AutoAd;
-import java.util.ArrayList;
+
 
 /**
  * The main API interface.
@@ -10,7 +12,7 @@ import java.util.ArrayList;
  */
 class Scraper {
 
-  private static AutoData ad = new AutoData();
+  String baseURL = "";
 
   //Unknowns
 
@@ -26,14 +28,35 @@ class Scraper {
   String gearbox;
 
   public Scraper(){
-
+    //TODO: Pick some sane defaults.
+    this.postcode = "SW1A 2AA"; //TODO: check if no postcode, does website use geolocation to guess.
+    this.maxDistance = 1250;
+    this.minPrice = 1000;
+    this.maxPrice = 10000;
+    this.minYear = 2005;
+    this.maxYear = 2020;
+    this.gearbox = "Automatic";
   }
 
   /**
    * Scraped data from autotrader.co.uk based on the parameters passed into the Scraper object
    * */
   public ArrayList <AutoAd> scrape(){
+   //https://www.autotrader.co.uk/car-search?sort=relevance&postcode=KT174EX&radius=200&include-delivery-option=on&price-to=3000&transmission=Automatic&page=98 
+
+    // Build the Query
+    String url = AutoData.URL + "";
+    System.out.println(url);
+ 
+
+    // Start the selenium instance
+    
     return new ArrayList <AutoAd>();
+    // Make the searches & build the list
+
+
+    // Stop selenlum
+    
   }
 
 

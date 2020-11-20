@@ -68,7 +68,7 @@
               <manifest>
                 <addClasspath>true</addClasspath>
                 <classpathPrefix>lib/</classpathPrefix>
-                <mainClass>de.amrik.autoscraper.Scraper</mainClass>
+                <mainClass>de.amrik.autoscraper.App</mainClass>
               </manifest>
             </archive>
           </configuration>
