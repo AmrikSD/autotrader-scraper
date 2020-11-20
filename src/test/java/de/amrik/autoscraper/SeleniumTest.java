@@ -24,7 +24,7 @@ public class SeleniumTest {
 
       private static WebDriver driver;
       private WebElement element;
-      
+
       @BeforeClass
       public static void setUp()
       {
@@ -42,7 +42,7 @@ public class SeleniumTest {
       @Test
       public void getGoogle(){
        System.out.println("Starting test " + new Object(){}.getClass().getEnclosingMethod().getName());
-       
+
        driver.get("https://www.google.com");
        WebElement searchTxt = driver.findElement(By.name("q"));
        WebElement submitBtn = driver.findElement(By.name("btnK"));
