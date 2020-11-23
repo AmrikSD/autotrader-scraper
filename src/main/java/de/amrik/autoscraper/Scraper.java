@@ -31,6 +31,9 @@ class Scraper {
   int minYear;
   int maxYear;
 
+  double minEngineSize;
+  double maxEngineSize;
+
   String gearbox;
 
 
@@ -43,6 +46,8 @@ class Scraper {
     this.maxDistance = 200;
     this.minPrice = 1000;
     this.maxPrice = 10000;
+    this.minEngineSize = 0;
+    this.maxEngineSize = 2.0;
     this.gearbox = "Automatic";
   }
 
@@ -57,6 +62,8 @@ class Scraper {
     url += AutoData.POSTCODE + this.postcode;
     url += AutoData.RADIUS + this.maxDistance;
     url += AutoData.TRANSMISSION + this.gearbox;
+    url += AutoData.MIN_ENGINE + this.minEngineSize;
+    url += AutoData.MAX_ENGINE + this.maxEngineSize;
     url += AutoData.PRICE_FROM + this.minPrice;
     url += AutoData.PRICE_TO + this.maxPrice;
 
@@ -130,6 +137,14 @@ class Scraper {
   public void setGearbox(String gearbox){
     this.gearbox = gearbox;
   }
+  
+  public void setMinEngineSize(double engSize){
+    this.minEngineSize = engSize;
+  }
+
+  public void setMaxEngineSize(double engSize){
+    this.maxEngineSize = engSize; 
+  }
 
   public String getPostcode(){
     return postcode;
@@ -158,5 +173,12 @@ class Scraper {
   public String getGearbox(){
     return gearbox;
   }
+  
+  public double getMaxEngineSize(){
+    return maxEngineSize;
+  }
 
+  public double getMinEngineSize(){
+    return minEngineSize;
+  }
 }

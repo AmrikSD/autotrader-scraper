@@ -18,6 +18,9 @@ class AutoData {
   public static final String PRICE_TO = "&price-to=";
   public static final String MAX_MILES = "&maximum-mileage=";
 
+  public static final String MIN_ENGINE = "&minimum-badge-engine-size=";
+  public static final String MAX_ENGINE = "&maximum-badge-engine-size=";
+
   public static final String INCLUDE_DELIVERY_OPTION = "&include-delivery-option=";
   public static final String COLUUR = "&colour=";
   public static final String ONE_SEARCH_AD = "&onesearchad=";
