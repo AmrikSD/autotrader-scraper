@@ -6,7 +6,8 @@ class AutoData {
   public static final int MAX_PAGES = 100; // https://www.autotrader.co.uk/.....&page=101 is not valid ever
 
   public static final String PAGES_CLASS = "paginationMini__count";
-
+  public static final String RESULTS_LIST_CLASS = "search-page__results";
+  public static final String ADVERT_CLASS = "search-page__result";
 
   public static final String SORT_BY = "?sort=";
 

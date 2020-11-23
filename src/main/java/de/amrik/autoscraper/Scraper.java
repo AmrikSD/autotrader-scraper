@@ -79,9 +79,18 @@ class Scraper {
     WebElement pageCountElement = driver.findElement(By.className(AutoData.PAGES_CLASS)); 
     String pagesStr = pageCountElement.getText().split(" ")[3];
     int pages = Integer.parseInt(pagesStr);
-    pages = Math.min(pages,100);
+    pages = Math.min(pages,AutoData.MAX_PAGES);
+
 
     System.out.println(pages);
+
+    WebElement advertListElement = driver.findElement(By.className(AutoData.RESULTS_LIST_CLASS));
+
+    List<WebElement> carAdverts = driver.findElements(By.className(AutoData.ADVERT_CLASS));
+
+    for(WebElement carAd : carAdverts){
+      System.out.println(carAd.getText());
+    }
 
     // Close Selenium
     if(driver != null){
