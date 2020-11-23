@@ -5,6 +5,9 @@ class AutoData {
   public static final String URL = "https://www.autotrader.co.uk/car-search";
   public static final int MAX_PAGES = 100; // https://www.autotrader.co.uk/.....&page=101 is not valid ever
 
+  public static final String PAGES_CLASS = "paginationMini__count";
+
+
   public static final String SORT_BY = "?sort=";
 
   public static final String POSTCODE = "&postcode=";
