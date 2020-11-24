@@ -22,7 +22,7 @@ class AutoData {
   public static final String MAX_ENGINE = "&maximum-badge-engine-size=";
 
   public static final String INCLUDE_DELIVERY_OPTION = "&include-delivery-option=";
-  public static final String COLUUR = "&colour=";
+  public static final String COLOUR = "&colour=";
   public static final String ONE_SEARCH_AD = "&onesearchad=";
   public static final String ADVERTISING_LOCATION = "&advertising-location=";
 
