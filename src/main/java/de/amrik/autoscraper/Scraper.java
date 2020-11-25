@@ -50,7 +50,7 @@ class Scraper {
     this.postcode = "SW1A2AA"; //TODO: check if just ignoring postcode, works, does website just guess for us?
     this.maxDistance = 200;
     this.minPrice = 1000;
-    this.maxPrice = 10000;
+    this.maxPrice = 3000;
     this.minEngineSize = 0;
     this.maxEngineSize = 2.0;
     this.gearbox = "Automatic";
@@ -72,6 +72,7 @@ class Scraper {
     url += AutoData.PRICE_FROM + this.minPrice;
     url += AutoData.PRICE_TO + this.maxPrice;
 
+
     //System.out.println(url);
     
     // Start Selenium
@@ -91,29 +92,30 @@ class Scraper {
     driver.manage().addCookie(AutoData.cookie);
 
 
-    
-    // Get the proper URL
-    driver.get(url);
-    
     // Get total number of pages.
+    driver.get(url);   
     WebElement pageCountElement = driver.findElement(By.className(AutoData.PAGES_CLASS)); 
     String pagesStr = pageCountElement.getText().split(" ")[3];
     int pages = Integer.parseInt(pagesStr);
     pages = Math.min(pages,AutoData.MAX_PAGES);
 
-    System.out.println(pages);
 
-    List<WebElement> websiteAdList = driver.findElements(By.xpath(AutoData.ADVERT_XPATH));
+    for(int i = 0; i<pages; i++){
+
+      System.out.println("Page" + i);
+      driver.get(url+"&page?="+i);
+
+      List<WebElement> websiteAdList = driver.findElements(By.xpath(AutoData.ADVERT_XPATH));
 
 
-    for(WebElement ad : websiteAdList){
-      jsExecutor.executeScript("arguments[0].scrollIntoView(true);", ad);
-      String title = ad.findElement(By.className(AutoData.CAR_TITLE_CLASS)).getText();
-      String price = ad.findElement(By.className(AutoData.CAR_PRICE_CLASS)).getText();
+      for(WebElement ad : websiteAdList){
+        jsExecutor.executeScript("arguments[0].scrollIntoView(true);", ad);
+        String title = ad.findElement(By.className(AutoData.CAR_TITLE_CLASS)).getText();
+        String price = ad.findElement(By.className(AutoData.CAR_PRICE_CLASS)).getText();
 
-      System.out.println(title+" : "+price);
+        System.out.println(title+" : "+price);
+      }
     }
-
     // Close Selenium
     if(driver != null){
       driver.close();
