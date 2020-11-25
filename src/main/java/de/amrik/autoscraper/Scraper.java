@@ -3,6 +3,8 @@ package de.amrik.autoscraper;
 import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
+import java.util.Set;
 
 import de.amrik.autoscraper.AutoData;
 import de.amrik.autoscraper.AutoAd;
@@ -14,6 +16,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.Cookie;
+
 
 /**
  * The main API interface.
@@ -67,8 +72,7 @@ class Scraper {
     url += AutoData.PRICE_FROM + this.minPrice;
     url += AutoData.PRICE_TO + this.maxPrice;
 
-    //TODO remove
-    System.out.println(url);
+    //System.out.println(url);
     
     // Start Selenium
     WebDriverManager.chromedriver().setup();
@@ -78,25 +82,36 @@ class Scraper {
     //TODO options.addArguments("--headless");
     driver = new ChromeDriver(options);
     driver.manage().window().maximize();
-    driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS); 
+    driver.manage().timeouts().implicitlyWait(120, TimeUnit.MICROSECONDS);
     JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+    WebDriverWait wait = new WebDriverWait(driver,10);
+    
+    // Add the cookie so that autotrader can stop being little bitches..
+    driver.get(AutoData.URL);
+    driver.manage().addCookie(AutoData.cookie);
 
-    // Go to AutoTader. See how many pages there are - hardcap of 100. (AutoTrader does this)
+
+    
+    // Get the proper URL
     driver.get(url);
+    
+    // Get total number of pages.
     WebElement pageCountElement = driver.findElement(By.className(AutoData.PAGES_CLASS)); 
     String pagesStr = pageCountElement.getText().split(" ")[3];
     int pages = Integer.parseInt(pagesStr);
     pages = Math.min(pages,AutoData.MAX_PAGES);
 
-
     System.out.println(pages);
 
-    WebElement advertListElement = driver.findElement(By.className(AutoData.RESULTS_LIST_CLASS));
+    List<WebElement> websiteAdList = driver.findElements(By.xpath(AutoData.ADVERT_XPATH));
 
-    List<WebElement> carAdverts = driver.findElements(By.className(AutoData.ADVERT_CLASS));
 
-    for(WebElement carAd : carAdverts){
-      System.out.println(carAd.getText());
+    for(WebElement ad : websiteAdList){
+      jsExecutor.executeScript("arguments[0].scrollIntoView(true);", ad);
+      String title = ad.findElement(By.className(AutoData.CAR_TITLE_CLASS)).getText();
+      String price = ad.findElement(By.className(AutoData.CAR_PRICE_CLASS)).getText();
+
+      System.out.println(title+" : "+price);
     }
 
     // Close Selenium
@@ -104,13 +119,11 @@ class Scraper {
       driver.close();
     }
 
-
     return new ArrayList <AutoAd>();
   }
 
 
   public void setPostcode(String postcode){
-
     this.postcode = postcode;
   }
 
