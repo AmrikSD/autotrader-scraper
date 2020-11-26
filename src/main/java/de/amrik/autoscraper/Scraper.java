@@ -2,12 +2,7 @@ package de.amrik.autoscraper;
 
 import java.util.concurrent.TimeUnit;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Date;
-import java.util.Set;
 
-import de.amrik.autoscraper.AutoData;
-import de.amrik.autoscraper.AutoAd;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
@@ -15,10 +10,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.Cookie;
-
 
 /**
  * The main API interface.
@@ -80,12 +71,11 @@ class Scraper {
     ChromeOptions options = new ChromeOptions();
     options.addArguments("--no-sandbox");
     options.addArguments("--disable-dev-shm-usage");
-    //TODO options.addArguments("--headless");
+    options.addArguments("user-agent=Literally fuck you autotrader...");
+    options.addArguments("--headless");
     driver = new ChromeDriver(options);
     driver.manage().window().maximize();
     driver.manage().timeouts().implicitlyWait(120, TimeUnit.MICROSECONDS);
-    JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
-    WebDriverWait wait = new WebDriverWait(driver,10);
     
     // Add the cookie so that autotrader can stop being little bitches..
     driver.get(AutoData.URL);
@@ -99,21 +89,8 @@ class Scraper {
     int pages = Integer.parseInt(pagesStr);
     pages = Math.min(pages,AutoData.MAX_PAGES);
 
-
-    for(int i = 1; i <= pages; i++){
-
-      driver.get(url+"&page?="+i);
-
-      List<WebElement> websiteAdList = driver.findElements(By.xpath(AutoData.ADVERT_XPATH));
-
-
-      for(WebElement ad : websiteAdList){
-        String title = ad.findElement(By.className(AutoData.CAR_TITLE_CLASS)).getText();
-        String price = ad.findElement(By.className(AutoData.CAR_PRICE_CLASS)).getText();
-
-        System.out.println(title+" : "+price);
-      }
-    }
+    System.out.println(pages);
+    
     // Close Selenium
     if(driver != null){
       driver.close();
