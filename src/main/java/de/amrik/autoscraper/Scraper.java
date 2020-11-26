@@ -1,8 +1,10 @@
 package de.amrik.autoscraper;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.ArrayList;
-
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
@@ -34,7 +36,8 @@ class Scraper {
 
 
   private static WebDriver driver;
-
+  public static ThreadLocal<WebDriver> browsers = new ThreadLocal<WebDriver>();
+  private ArrayList<AutoAd> cars = new ArrayList<AutoAd>();
 
   public Scraper(){
     //TODO: Pick some sane defaults.
@@ -64,8 +67,6 @@ class Scraper {
     url += AutoData.PRICE_TO + this.maxPrice;
 
 
-    //System.out.println(url);
-    
     // Start Selenium
     WebDriverManager.chromedriver().setup();
     ChromeOptions options = new ChromeOptions();
@@ -84,19 +85,21 @@ class Scraper {
 
     // Get total number of pages.
     driver.get(url);   
-    WebElement pageCountElement = driver.findElement(By.className(AutoData.PAGES_CLASS)); 
+    WebElement pageCountElement = driver.findElement(AutoData.PAGES_CLASS); 
     String pagesStr = pageCountElement.getText().split(" ")[3];
     int pages = Integer.parseInt(pagesStr);
     pages = Math.min(pages,AutoData.MAX_PAGES);
 
-    System.out.println(pages);
-    
     // Close Selenium
     if(driver != null){
       driver.close();
     }
 
-    return new ArrayList <AutoAd>();
+    Browser b = new Browser();
+    b.setParams(url, 1, pages);
+    cars.addAll(b.call());
+
+    return cars;
   }
 
 

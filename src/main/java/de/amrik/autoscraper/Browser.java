@@ -1,6 +1,7 @@
 package de.amrik.autoscraper;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -8,9 +9,12 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.By;
 
-public class Browser implements Runnable {
-  
+
+public class Browser {
+
   private volatile ArrayList<AutoAd> cars = new ArrayList<AutoAd>();
   
   private String url;
@@ -51,20 +55,30 @@ public class Browser implements Runnable {
     this.endPage = Math.min(AutoData.MAX_PAGES, endPage); 
   }
    
-  /**
-   * Runs the browser to scrape from the url in setParams, populates a list of car adverts that can be retrieved using getCars()
-   * */
-  @Override
-  public void run(){
+  public ArrayList<AutoAd> call(){
     
     setupBrowser();
 
-    for(int i = startPage; i<= endPage; i++){
-      System.out.println(i);
+    for(int i = startPage; i<=endPage;i++){
+      driver.get(url+"&page="+i);
+      
+      for(WebElement ad: driver.findElements(AutoData.ADVERT_CLASS)){
+        AutoAd currCar = new AutoAd();
+        currCar.make = ad.findElement(AutoData.CAR_TITLE_CLASS).getText();
+        currCar.price = ad.findElement(AutoData.CAR_PRICE_CLASS).getText();
+        currCar.url = currCar.url + ad.getAttribute("id");
+        currCar.tags = ad.findElement(AutoData.CAR_TAGS_CLASS).getText();
+
+
+        cars.add(currCar);
+      }
+    
     }
 
-
     closeBrowser();
+
+    return cars;
+
   }
 
 
@@ -74,6 +88,7 @@ public class Browser implements Runnable {
     ChromeOptions options = new ChromeOptions();
     options.addArguments("--no-sandbox");
     options.addArguments("--disable-dev-shm-usage");
+    options.addArguments("user-agent=fuck you autotrader LOL WORMS");
     options.addArguments("--headless");
 
     driver = new ChromeDriver(options);
@@ -82,19 +97,13 @@ public class Browser implements Runnable {
 
     driver.get(AutoData.URL);
     driver.manage().addCookie(AutoData.cookie);
+    driver.get(AutoData.URL);
   }
 
   private void closeBrowser(){
    if(driver != null){
      driver.close();
    } 
-  }
-
-  /**
-   * @return a list of @see de.amrik.autoscraper.AutoAd
-   * */
-  public ArrayList<AutoAd> getCars(){
-    return cars;
   }
 
 }
