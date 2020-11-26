@@ -100,16 +100,14 @@ class Scraper {
     pages = Math.min(pages,AutoData.MAX_PAGES);
 
 
-    for(int i = 0; i<pages; i++){
+    for(int i = 1; i <= pages; i++){
 
-      System.out.println("Page" + i);
       driver.get(url+"&page?="+i);
 
       List<WebElement> websiteAdList = driver.findElements(By.xpath(AutoData.ADVERT_XPATH));
 
 
       for(WebElement ad : websiteAdList){
-        jsExecutor.executeScript("arguments[0].scrollIntoView(true);", ad);
         String title = ad.findElement(By.className(AutoData.CAR_TITLE_CLASS)).getText();
         String price = ad.findElement(By.className(AutoData.CAR_PRICE_CLASS)).getText();
 
