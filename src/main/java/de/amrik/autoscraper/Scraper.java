@@ -1,11 +1,10 @@
 package de.amrik.autoscraper;
 
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.ArrayList;
-import java.util.List;
-
-import de.amrik.autoscraper.AutoData;
-import de.amrik.autoscraper.AutoAd;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
@@ -13,7 +12,6 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.JavascriptExecutor;
 
 /**
  * The main API interface.
@@ -38,14 +36,15 @@ class Scraper {
 
 
   private static WebDriver driver;
-
+  public static ThreadLocal<WebDriver> browsers = new ThreadLocal<WebDriver>();
+  private ArrayList<AutoAd> cars = new ArrayList<AutoAd>();
 
   public Scraper(){
     //TODO: Pick some sane defaults.
     this.postcode = "SW1A2AA"; //TODO: check if just ignoring postcode, works, does website just guess for us?
     this.maxDistance = 200;
     this.minPrice = 1000;
-    this.maxPrice = 10000;
+    this.maxPrice = 3000;
     this.minEngineSize = 0;
     this.maxEngineSize = 2.0;
     this.gearbox = "Automatic";
@@ -67,50 +66,44 @@ class Scraper {
     url += AutoData.PRICE_FROM + this.minPrice;
     url += AutoData.PRICE_TO + this.maxPrice;
 
-    //TODO remove
-    System.out.println(url);
-    
+
     // Start Selenium
     WebDriverManager.chromedriver().setup();
     ChromeOptions options = new ChromeOptions();
     options.addArguments("--no-sandbox");
     options.addArguments("--disable-dev-shm-usage");
-    //TODO options.addArguments("--headless");
+    options.addArguments("user-agent=Literally fuck you autotrader...");
+    options.addArguments("--headless");
     driver = new ChromeDriver(options);
     driver.manage().window().maximize();
-    driver.manage().timeouts().implicitlyWait(15, TimeUnit.SECONDS); 
-    JavascriptExecutor jsExecutor = (JavascriptExecutor) driver;
+    driver.manage().timeouts().implicitlyWait(120, TimeUnit.MICROSECONDS);
+    
+    // Add the cookie so that autotrader can stop being little bitches..
+    driver.get(AutoData.URL);
+    driver.manage().addCookie(AutoData.cookie);
 
-    // Go to AutoTader. See how many pages there are - hardcap of 100. (AutoTrader does this)
-    driver.get(url);
-    WebElement pageCountElement = driver.findElement(By.className(AutoData.PAGES_CLASS)); 
+
+    // Get total number of pages.
+    driver.get(url);   
+    WebElement pageCountElement = driver.findElement(AutoData.PAGES_CLASS); 
     String pagesStr = pageCountElement.getText().split(" ")[3];
     int pages = Integer.parseInt(pagesStr);
     pages = Math.min(pages,AutoData.MAX_PAGES);
-
-
-    System.out.println(pages);
-
-    WebElement advertListElement = driver.findElement(By.className(AutoData.RESULTS_LIST_CLASS));
-
-    List<WebElement> carAdverts = driver.findElements(By.className(AutoData.ADVERT_CLASS));
-
-    for(WebElement carAd : carAdverts){
-      System.out.println(carAd.getText());
-    }
 
     // Close Selenium
     if(driver != null){
       driver.close();
     }
 
+    Browser b = new Browser();
+    b.setParams(url, 1, pages);
+    cars.addAll(b.call());
 
-    return new ArrayList <AutoAd>();
+    return cars;
   }
 
 
   public void setPostcode(String postcode){
-
     this.postcode = postcode;
   }
 
