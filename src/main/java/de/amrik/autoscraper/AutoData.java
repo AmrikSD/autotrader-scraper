@@ -14,6 +14,8 @@ class AutoData {
   public static final String POSTCODE = "&postcode=";
   public static final String RADIUS = "&radius=";
   public static final String TRANSMISSION = "&transmission=";
+  public static final String MAKE = "&make=";
+  public static final String MODEL = "&model=";
   public static final String PRICE_FROM = "&price-from=";
   public static final String PRICE_TO = "&price-to=";
   public static final String MAX_MILES = "&maximum-mileage=";
@@ -22,8 +24,7 @@ class AutoData {
   public static final String INCLUDE_DELIVERY_OPTION = "&include-delivery-option=";
   public static final String COLOUR = "&colour=";
   public static final String ONE_SEARCH_AD = "&onesearchad=";
-  public static final String ADVERTISING_LOCATION = "&advertising-location=";
-  
+  public static final String ADVERTISING_LOCATION = "&advertising-location="; 
 
   public static final By COOKIES_ACCEPT_XPATH = By.xpath("/html/body/div/div[3]/div[3]/div[2]/button[2]");
 
@@ -36,6 +37,5 @@ class AutoData {
   public static final By CAR_TITLE_CLASS = By.className("product-card-details__title");
   public static final By CAR_PRICE_CLASS = By.className("product-card-pricing__price");
   public static final By CAR_TAGS_CLASS = By.className("listing-key-specs");
-
 
 }

@@ -15,7 +15,7 @@ class App{
     for(AutoAd car : cars){
      System.out.println(car); 
     }
-
+    System.out.println(cars.size());
   }
 
 }
