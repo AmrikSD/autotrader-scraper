@@ -72,5 +72,4 @@ public class Browser implements Runnable {
   public ArrayList<AutoAd> getAds(){
     return ads;
   }
-
 }
