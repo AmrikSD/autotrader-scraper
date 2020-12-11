@@ -26,6 +26,7 @@ class AutoData {
   public static final String ONE_SEARCH_AD = "&onesearchad=";
   public static final String ADVERTISING_LOCATION = "&advertising-location="; 
 
+
   public static final By COOKIES_ACCEPT_XPATH = By.xpath("/html/body/div/div[3]/div[3]/div[2]/button[2]");
 
   public static final By PAGES_CLASS = By.className("paginationMini__count");
@@ -37,5 +38,6 @@ class AutoData {
   public static final By CAR_TITLE_CLASS = By.className("product-card-details__title");
   public static final By CAR_PRICE_CLASS = By.className("product-card-pricing__price");
   public static final By CAR_TAGS_CLASS = By.className("listing-key-specs");
+
 
 }

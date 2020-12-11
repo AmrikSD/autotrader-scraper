@@ -40,6 +40,7 @@ class Scraper {
 
   private static WebDriver driver;
 
+
   public Scraper(){
   
   }
@@ -63,6 +64,7 @@ class Scraper {
     url += AutoData.PRICE_TO + this.maxPrice;
 
     System.out.println(url);
+
 
     // Start Selenium
     WebDriverManager.chromedriver().setup();

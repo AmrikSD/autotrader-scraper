@@ -1,4 +1,4 @@
-package de.amrik.autoscraper;
+ackage de.amrik.autoscraper;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
