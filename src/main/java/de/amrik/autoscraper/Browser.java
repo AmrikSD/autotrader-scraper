@@ -1,4 +1,4 @@
-ackage de.amrik.autoscraper;
+package de.amrik.autoscraper;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
@@ -72,5 +72,4 @@ public class Browser implements Runnable {
   public ArrayList<AutoAd> getAds(){
     return ads;
   }
-
 }
