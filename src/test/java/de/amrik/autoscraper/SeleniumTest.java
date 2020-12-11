@@ -6,7 +6,6 @@ import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import static org.junit.Assert.assertEquals;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.By;
@@ -23,7 +22,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 public class SeleniumTest {
 
       private static WebDriver driver;
-      private WebElement element;
 
       @BeforeClass
       public static void setUp()

@@ -20,34 +20,29 @@ import org.openqa.selenium.chrome.ChromeOptions;
 class Scraper {
 
   //Unknowns
-  String postcode;
-  int maxDistance;
+  String postcode = "SW1A2AA";
+  String make = "";
+  String model = "";
+  int maxDistance = 150;
 
-  int minPrice;
-  int maxPrice;
+  int minPrice = 1000;
+  int maxPrice = 3000;
 
-  int minYear;
-  int maxYear;
+  int minYear = 0;
+  int maxYear = 0;
 
-  double minEngineSize;
-  double maxEngineSize;
+  double minEngineSize = 0;
+  double maxEngineSize = 2.0;
 
-  String gearbox;
+  String gearbox = "Automatic";
 
+  int pagesToSearch = 100;
 
   private static WebDriver driver;
-  public static ThreadLocal<WebDriver> browsers = new ThreadLocal<WebDriver>();
-  private ArrayList<AutoAd> cars = new ArrayList<AutoAd>();
+
 
   public Scraper(){
-    //TODO: Pick some sane defaults.
-    this.postcode = "SW1A2AA"; //TODO: check if just ignoring postcode, works, does website just guess for us?
-    this.maxDistance = 200;
-    this.minPrice = 1000;
-    this.maxPrice = 3000;
-    this.minEngineSize = 0;
-    this.maxEngineSize = 2.0;
-    this.gearbox = "Automatic";
+  
   }
 
   /**
@@ -61,10 +56,14 @@ class Scraper {
     url += AutoData.POSTCODE + this.postcode;
     url += AutoData.RADIUS + this.maxDistance;
     url += AutoData.TRANSMISSION + this.gearbox;
+    url += AutoData.MAKE + this.make;
+    url += AutoData.MODEL + this.model;
     url += AutoData.MIN_ENGINE + this.minEngineSize;
     url += AutoData.MAX_ENGINE + this.maxEngineSize;
     url += AutoData.PRICE_FROM + this.minPrice;
     url += AutoData.PRICE_TO + this.maxPrice;
+
+    System.out.println(url);
 
 
     // Start Selenium
@@ -88,18 +87,51 @@ class Scraper {
     WebElement pageCountElement = driver.findElement(AutoData.PAGES_CLASS); 
     String pagesStr = pageCountElement.getText().split(" ")[3];
     int pages = Integer.parseInt(pagesStr);
-    pages = Math.min(pages,AutoData.MAX_PAGES);
+    pages = Math.min(Math.min(pagesToSearch,pages),AutoData.MAX_PAGES);
 
     // Close Selenium
     if(driver != null){
       driver.close();
     }
 
-    Browser b = new Browser();
-    b.setParams(url, 1, pages);
-    cars.addAll(b.call());
+    // Call some browsers to get the actual Car objects....
+    // TODO: MAKE IT IT GO BRRRR (MULTITHREADING)
+   
 
-    return cars;
+    int noOfBrowsers = (int) Math.ceil(pages*1.0 / AutoData.MAX_PAGES_PER_DRIVER*1.0);
+
+    Browser[] browsers = new Browser[noOfBrowsers];
+    Thread[] threadList = new Thread[noOfBrowsers];
+    ArrayList<AutoAd>[] cars = new ArrayList[noOfBrowsers];
+
+    ArrayList<AutoAd> returnList = new ArrayList<AutoAd>();
+
+    for(int i = 0; i<noOfBrowsers; i++){
+      int start = (i * AutoData.MAX_PAGES_PER_DRIVER);
+      int end =  Math.min(pages ,((i+1) * AutoData.MAX_PAGES_PER_DRIVER) -1);
+      cars[i] = new ArrayList<AutoAd>();
+      browsers[i] = new Browser(url, start, end, cars[i]);
+      threadList[i] = new Thread(browsers[i]);
+    }
+
+
+    for(Thread t : threadList){
+      t.start();
+    }
+
+    for(Thread t : threadList){
+      try{
+        t.join();
+      }catch(Exception e){
+        System.out.println(e);
+      }
+    }
+
+    for(Browser b : browsers){
+      returnList.addAll(b.getAds());
+    }
+
+    return returnList;
   }
 
 
@@ -139,6 +171,18 @@ class Scraper {
     this.maxEngineSize = engSize; 
   }
 
+  public void setMake(String make){
+    this.make = make;
+  }
+
+  public void setModel(String model){
+    this.model = model; 
+  }
+
+  public void setPages(int pages){
+    this.pagesToSearch = Math.min(100,pages);
+  }
+
   public String getPostcode(){
     return postcode;
   }
@@ -173,5 +217,19 @@ class Scraper {
 
   public double getMinEngineSize(){
     return minEngineSize;
+  }
+
+  public String getMake(){
+    return make;
+  }
+  public String getModel(){
+    return model;
+  }
+
+  /**
+   * return the number of pages the user wants to search, this can be more than what will actually be searched, if there are less pages on atotrader than the user wants..
+   * */
+  public int getPagesToSearch(){
+    return pagesToSearch;
   }
 }
