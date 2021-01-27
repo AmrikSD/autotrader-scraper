@@ -1,6 +1,6 @@
 package de.amrik.autoscraper;
 
-class AutoAd{
+class AutoAd {
 
   public String url = "https://www.autotrader.co.uk/car-details/";
   public String make = "NOMAKE";
@@ -10,8 +10,7 @@ class AutoAd{
   public Boolean isAd = false;
 
   @Override
-  public String toString(){
-   return "Url "+url+"\nPrice "+price+"\nMake "+make; 
+  public String toString() {
+    return "Url " + url + "\nPrice " + price + "\nMake " + make;
   }
-
 }
