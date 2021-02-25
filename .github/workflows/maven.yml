@@ -20,9 +20,11 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: make shell script executable
-      run: chmod +x ./scripts/InstallChrome.sh
-    - name: Install chrome with the script
-      run: ./scripts/InstallChrome.sh
+    - name: download google chrome
+      run: wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+
+    - name: install google chrome
+      run: sudo apt install ./google-chrome-stable_current_amd64.deb
+
     - name: Build with Maven
       run: mvn -B package --file pom.xml
